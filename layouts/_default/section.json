@@ -1,0 +1,7 @@
+{{- $pages := .RegularPagesRecursive -}}
+[
+{{- range $i, $p := $pages -}}
+{{- if $i }},{{ end }}
+{"title":{{ $p.Title | jsonify }},"permalink":{{ $p.RelPermalink | jsonify }},"date":{{ ($p.Date.Format "2006-01-02") | jsonify }},"tags":{{ (default (slice) $p.Params.tags) | jsonify }},"categories":{{ (default (slice) $p.Params.categories) | jsonify }}}
+{{- end -}}
+]

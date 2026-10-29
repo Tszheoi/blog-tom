@@ -1,0 +1,116 @@
+{{- /* Tsz 定制：文件夹上下文 / 隐藏面包屑 / 标签与归档按文件夹过滤 / 左上角 logo 不可点 */ -}}
+<script>
+(function () {
+  var path = location.pathname;
+  var mm = path.match(/^\/posts\/([^\/]+)\//);
+  var folder = mm ? mm[1] : null;
+  var q = new URLSearchParams(location.search);
+  var scope = q.get('f') || folder;
+
+  function hrefPath(a) {
+    try { return decodeURIComponent(new URL(a.href, location.origin).pathname); } catch (e) { return ''; }
+  }
+
+  function scopeMenu() {
+    if (!folder) return;
+    var links = document.querySelectorAll('#menu a, ul.menu a');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      var p = hrefPath(a);
+      if (p === '/posts/' || p === '/posts') a.setAttribute('href', '/posts/' + folder + '/');
+      else if (p === '/tags/' || p === '/tags') a.setAttribute('href', '/tags/?f=' + folder);
+      else if (p === '/archives/' || p === '/archives') a.setAttribute('href', '/archives/?f=' + folder);
+    }
+  }
+
+  function plainLogo() {
+    var logo = document.querySelector('.logo > a');
+    if (!logo) return;
+    var span = document.createElement('span');
+    span.className = logo.className;
+    span.innerHTML = logo.innerHTML;
+    span.style.cursor = 'default';
+    logo.parentNode.replaceChild(span, logo);
+  }
+
+  function bar(text) {
+    var d = document.createElement('div');
+    d.className = 'folder-scope-bar';
+    d.innerHTML = text;
+    var main = document.querySelector('main.main');
+    if (main) main.insertBefore(d, main.firstChild);
+  }
+
+  function inScope(a) {
+    var p = hrefPath(a);
+    return p.indexOf('/posts/' + scope + '/') >= 0;
+  }
+
+  // 归档：隐藏不属于本文件夹的条目，并处理空的月/年分组与计数
+  function filterArchives() {
+    if (!scope || !/^\/archives/.test(path)) return;
+    var entries = document.querySelectorAll('.archive-entry');
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      var a = e.querySelector('a[href*="/posts/"]');
+      if (!a) continue;
+      if (!inScope(a)) e.style.display = 'none';
+    }
+    var months = document.querySelectorAll('.archive-month');
+    for (var m = 0; m < months.length; m++) {
+      var vis = months[m].querySelectorAll('.archive-entry:not([style*="display: none"])');
+      var cnt = months[m].querySelector('.archive-count');
+      if (vis.length === 0) months[m].style.display = 'none';
+      else if (cnt) cnt.textContent = '\u00a0' + vis.length;
+    }
+    var years = document.querySelectorAll('.archive-year');
+    for (var y = 0; y < years.length; y++) {
+      var visM = years[y].querySelectorAll('.archive-month:not([style*="display: none"])');
+      var cntY = years[y].querySelector('.archive-count');
+      if (visM.length === 0) years[y].style.display = 'none';
+      else if (cntY) cntY.textContent = '\u00a0' + visM.length;
+    }
+    bar('只看文件夹：<b>' + scope + '</b> · <a href="/archives/">查看全部</a>');
+  }
+
+  // 标签：用该文件夹的 index.json 反查真实标签
+  function filterTags() {
+    if (!scope || !/^\/tags/.test(path)) return;
+    bar('只看文件夹：<b>' + scope + '</b> · <a href="/tags/">查看全部</a>');
+    fetch('/posts/' + encodeURIComponent(scope) + '/index.json').then(function (r) { return r.json(); }).then(function (list) {
+      var tags = {};
+      for (var i = 0; i < list.length; i++) {
+        var t = list[i].tags || [];
+        for (var j = 0; j < t.length; j++) tags[String(t[j]).toLowerCase()] = 1;
+      }
+      var items = document.querySelectorAll('ul.terms-tags li, .terms-tags li');
+      var kept = 0;
+      for (var k = 0; k < items.length; k++) {
+        var li = items[k];
+        var a = li.querySelector('a');
+        if (!a) continue;
+        var name = (a.textContent || '').trim().split(/\s/)[0].toLowerCase();
+        if (tags[name]) kept++; else li.style.display = 'none';
+      }
+      if (kept === 0) {
+        var empty = document.createElement('p');
+        empty.textContent = '这个文件夹里还没有标签';
+        document.querySelector('main.main').appendChild(empty);
+      }
+    }).catch(function () {});
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    plainLogo();
+    scopeMenu();
+    filterArchives();
+    filterTags();
+  });
+})();
+</script>
+<style>
+.breadcrumbs, #breadcrumbs { display: none; }
+.logo > span { cursor: default; }
+.folder-scope-bar { margin: 10px 0 18px; padding: 8px 14px; border-radius: 10px; background: var(--entry); border: 1px solid var(--border); font-size: 13px; color: var(--secondary); }
+.folder-scope-bar a { color: var(--primary); }
+</style>

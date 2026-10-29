@@ -1,0 +1,72 @@
+{{- define "main" }}
+
+{{- $postsSec := site.GetPage "/posts" }}
+
+{{- if site.Params.homeInfoParams }}
+{{- partial "home_info.html" . }}
+{{- end }}
+
+<style>
+.home-folder { margin: 34px 0 8px; display: flex; align-items: baseline; gap: 10px; }
+.home-folder-title { margin: 0; font-size: 20px; font-weight: 700; }
+.home-folder-count { font-size: 13px; color: var(--secondary); }
+.home-folder-link { font-size: 13px; color: var(--secondary); text-decoration: none; }
+.home-folder-link:hover { color: var(--primary); }
+.home-root-divider { border: 0; border-top: 1px solid var(--border); margin: 30px 0 6px; }
+</style>
+
+{{- with $postsSec }}
+
+{{- range .Sections.ByTitle }}
+{{- $folder := . }}
+<div class="home-folder">
+  <h2 class="home-folder-title">📁 {{ $folder.Title }}</h2>
+  <span class="home-folder-count">{{ len $folder.RegularPagesRecursive }} 篇</span>
+  <a class="home-folder-link" href="{{ $folder.RelPermalink }}">查看全部 »</a>
+</div>
+{{- range $folder.RegularPagesRecursive.ByDate.Reverse }}
+<article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">{{ .Title }}</h2>
+  </header>
+  {{- if (ne (.Param "hideSummary") true) }}
+  <div class="entry-content">
+    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+{{- end }}
+
+{{- $rootPages := .RegularPages }}
+{{- if $rootPages }}
+<hr class="home-root-divider">
+{{- range $rootPages.ByDate.Reverse }}
+<article class="post-entry">
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">{{ .Title }}</h2>
+  </header>
+  {{- if (ne (.Param "hideSummary") true) }}
+  <div class="entry-content">
+    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- end }}

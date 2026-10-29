@@ -1,0 +1,25 @@
+{{- /* 上一篇 / 下一篇：只在「当前文件夹（section）」内导航，绝不跨文件夹，避免分享链接被顺藤摸瓜 */ -}}
+{{- $sec := .CurrentSection }}
+{{- $pages := $sec.RegularPagesRecursive }}
+{{- if eq $sec.Kind "home" }}
+  {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- else if eq $sec.RelPermalink "/posts/" }}
+  {{- $pages = $sec.RegularPages }}
+{{- end }}
+{{- $pages = $pages.ByDate.Reverse }}
+{{- if and (gt (len $pages) 1) (in $pages .) }}
+<nav class="paginav">
+  {{- with $pages.Next . }}
+  <a class="prev" href="{{ .Permalink }}">
+    <span class="title">« {{ i18n "prev_page" }}</span>
+    <span>{{- .Name -}}</span>
+  </a>
+  {{- end }}
+  {{- with $pages.Prev . }}
+  <a class="next" href="{{ .Permalink }}">
+    <span class="title">{{ i18n "next_page" }} »</span>
+    <span>{{- .Name -}}</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}

@@ -1,0 +1,83 @@
+baseURL = "https://m.blog.tszheoi-law.top/"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh"
+title = "ToM"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+pagination.pagerSize = 12
+googleAnalytics = ""
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[params]
+  env = "production"
+  title = "ToM"
+  description = "ToM 的记录：想法、项目和折腾"
+  keywords = ["博客", "ToM", "记录"]
+  author = "ToM"
+  DateFormat = "2006-01-02"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowRssButtonInSectionTermList = true
+  ShowFullTextinRSS = false
+  ShowToc = true
+  TocOpen = false
+  ShowWordCount = true
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = true
+
+[params.homeInfoParams]
+  Title = "Hi，我是 ToM"
+  Content = "pelakai@mail.tszheoi-law.top"
+
+[params.assets]
+  favicon = "/favicon.ico"
+favicon_32x32 = "/favicon-32.png"
+favicon_16x16 = "/favicon-16.png"
+apple_touch_icon = "/apple-touch-icon.png"
+[params.profileMode]
+  enabled = false
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/pelakai"
+
+[[params.socialIcons]]
+  name = "email"
+  url = "mailto:pelakai@mail.tszheoi-law.top"
+
+[[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "archives"
+  name = "归档"
+  url = "/archives/"
+  weight = 30
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+section = ["HTML", "RSS", "JSON"]
