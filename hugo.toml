@@ -41,8 +41,8 @@ googleAnalytics = ""
   showtoc = true
 
 [params.homeInfoParams]
-  Title = "Hi，我是 ToM"
-  Content = "pelakai@mail.tszheoi-law.top"
+  Title = "To：M"
+  Content = ""
 
 [params.assets]
   favicon = "/favicon.ico"
@@ -51,14 +51,6 @@ favicon_16x16 = "/favicon-16.png"
 apple_touch_icon = "/apple-touch-icon.png"
 [params.profileMode]
   enabled = false
-
-[[params.socialIcons]]
-  name = "github"
-  url = "https://github.com/pelakai"
-
-[[params.socialIcons]]
-  name = "email"
-  url = "mailto:pelakai@mail.tszheoi-law.top"
 
 [[menu.main]]
   identifier = "posts"
