@@ -114,3 +114,27 @@
 .folder-scope-bar { margin: 10px 0 18px; padding: 8px 14px; border-radius: 10px; background: var(--entry); border: 1px solid var(--border); font-size: 13px; color: var(--secondary); }
 .folder-scope-bar a { color: var(--primary); }
 </style>
+
+<!-- ===== 统一配色：薄荷绿 + 深色模式（浅灰主色） ===== -->
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171b23" media="(prefers-color-scheme: dark)">
+<style>
+:root{
+  --theme:#ffffff;--entry:#ffffff;--primary:#2d3142;--secondary:#6b7280;--tertiary:#f7f9fb;
+  --content:#2d3142;--border:#e8ecf1;--code-bg:#f4f7f5;--code-block-bg:#20242c;
+  --accent:#52d6a8;--accent-link:#2fae86;
+}
+[data-theme="dark"]{
+  --theme:#171b23;--entry:#1f242e;--primary:#e6e9ef;--secondary:#a9b1bf;--tertiary:#232936;
+  --content:#e6e9ef;--border:#2b313d;--code-bg:#232936;--code-block-bg:#0f131a;--hljs-bg:#232936;
+  --accent:#52d6a8;--accent-link:#74e2bd;
+}
+::selection{background:rgba(82,214,168,.28)}
+.post-content a,.entry-content a,.post-meta a,.entry-footer a,.archive-entry a{
+  color:var(--accent-link);text-decoration:none;border-bottom:1px solid rgba(82,214,168,.35)
+}
+.post-content a:hover,.entry-content a:hover{border-bottom-color:var(--accent-link)}
+.post-title a:hover,.entry-hint-parent a:hover,.logo a:hover{color:var(--accent-link)}
+.post-entry:hover{border-color:rgba(82,214,168,.55)}
+.folder-scope-bar{background:var(--entry);border-color:var(--border)}
+</style>
