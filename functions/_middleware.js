@@ -125,7 +125,7 @@ export async function onRequest(context) {
     const pw = form ? String(form.get('pw') || '') : '';
     const want = String(form ? form.get('next') || '/' : '/');
     const target = want.startsWith('/') && !want.startsWith('//') ? want : '/';
-    if (c.password && pw.trim().toLowerCase() === c.password.trim().toLowerCase()) {
+    if (c.password && pw.trim() === c.password.trim()) {
       return new Response(null, {
         status: 303,
         headers: { Location: target, 'Set-Cookie': await makeCookie(c, DAYS * 86400 * 1000) },
